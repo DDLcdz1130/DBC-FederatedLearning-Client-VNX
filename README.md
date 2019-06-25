@@ -16,8 +16,8 @@ The libraries in this repository can be used in any type of distributed computin
 
 This repository also serves as a part of our computing framework under the DeepBrain Chain (DBC) cloud on that enables distributed computing throughout the web, utilizing data and model training provided by a collection of users to obtain a collective model result. Multiple architechures of the FL computing framework are developed.
 
-	+
-	+
+<br/><br/>
+
 
 ## The architectures of the Federated Learning framework
 
