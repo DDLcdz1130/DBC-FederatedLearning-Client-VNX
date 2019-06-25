@@ -24,7 +24,7 @@ Client_stage_3_modelling.py executes the computations to be done by the client a
 
 ## Server application scripts
 
-The server algorithm is showcased in Server_stage_2_modelling.py. This script is solely used for explanation of the FL process. The server has its own algorithms and libraries. 
+
 
 
 ## Program pipelines
