@@ -3,7 +3,7 @@ A Federated Learning computing framework for deep learning-based model developme
 
 Provided by DeepBrain Chain, Inc. and VisionX.org
 
-<img src="docs/aux/images/DeepBrainChainLogo.jpg" width="400" height="200"> <img src="docs/aux/images/VisionX_logo.jpg" width="300" height="300">
+<img src="docs/aux/images/DeepBrainChainLogo.jpg" width="400" height="200"> <img src="docs/aux/images/VisionX_logo.jpg" width="200" height="200">
 
 
 
