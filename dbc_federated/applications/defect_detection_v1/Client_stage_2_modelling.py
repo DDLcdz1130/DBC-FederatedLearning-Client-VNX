@@ -11,8 +11,9 @@ import os
 import argparse
 import torchvision
 import copy
-from lib.tasks import (get_data_transforms, load_data, train_model, 
-                       eval_model, model_take_lower_layers, feature_eval_prep)
+from utils.data_processing import get_data_transforms, load_data, feature_eval_prep
+from modules.learning import train_model, eval_model
+from modules.model_config import model_take_lower_layers
 
 ### This script is to complete the whole process of extracting features from a set of labeled image data.
 ## Loading the dataloaders -- Make sure that the data is saved in following way
