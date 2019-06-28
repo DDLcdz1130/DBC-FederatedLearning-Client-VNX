@@ -10,8 +10,9 @@ Provided by DeepBrain Chain, Inc. and VisionX.org
 
 ## About this repository
 
-This is a Python package for the training/testing of deep learning-based models in decentralized computing framework, called Federated Learning (FL). This repository is used by the client side (the computing nodes that do most of the computation) or edge devices rather than the server.  The original FL methodolgy can be found at:
+This is a Python 3 package for the training/testing of deep learning-based models in decentralized computing framework, called Federated Learning (FL). This repository is used by the client side (the computing nodes that do most of the computation) or edge devices rather than the server.  
 
+The PyTorch version currently supported is 1.13.3.
 
 The libraries in this repository can be used in any type of distributed computing for deep learning in any circumstance. It is currently composed of high level modules on top of the deep learning package of PyTorch for the modelling part. One can use the modules to write simplified pipelines for deep learning tasks. 
 
