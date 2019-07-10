@@ -11,10 +11,12 @@ import os
 import argparse
 import torchvision
 import copy
+
 from utils.data_processing import get_data_transforms, load_data, feature_eval_prep
 from modules.learning import train_model
 from modules.model_config import model_take_lower_layers
 from modules.models.Inception_V3_trimmed import inception_v3_trimmed
+
 
 ### This script is to train model on the raw image data from clients. The dataset
 ### should be arranged in train and val folders before running this code.

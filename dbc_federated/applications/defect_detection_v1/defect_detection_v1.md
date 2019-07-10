@@ -24,7 +24,7 @@ Client_stage_3_modelling.py executes the computations to be done by the client a
 
 ## Server application scripts
 
-
+The server script is not available.
 
 
 ## Program pipelines
