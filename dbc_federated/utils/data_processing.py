@@ -48,13 +48,13 @@ def get_data_transforms(mode="train", model_origin="Inception V3", mean=None, st
         pass
     
     if mode =="eval":  # eval is for getting simply feed forward results
-        print('creating data_transform')
+        #print('creating data_transform')
         data_transforms = {'eval':transforms.Compose([
                     transforms.Resize((scale,scale)),
                     transforms.ToTensor(),
                     transforms.Normalize(mean, std)
                     ])}
-        print('data_transform finished')
+        #print('data_transform finished')
 
     elif mode == "train":  # train is for model training
         data_transforms = {'train': transforms.Compose([
@@ -112,17 +112,45 @@ class MyImageFolder(datasets.ImageFolder):
 # Class MyImageFolder replaces ImageFolder for 'eval' mode!
 
 def load_data(data_dir, data_transforms, mode = 'eval', 
-              batch_size=16, num_workers=None):
-    
+              batch_size=16, num_workers=None, non_image_ext=None):
+    """
+    Choose the computational mode (train, test, or evaluate) the loaded data will be used
+    for and generate the data_loader for later doing computation on the data. This function
+    also returns specs of the dataset(s). 
+    Arguments:
+        data_dir:  directory of data
+        data_transform: a pytorch data transform function
+        mode: str value to decide on the mode. "eval" mode is to get features or end results 
+            of data from feedforward.
+        batch_size: batch size, integer.
+        num_workers: the number of workers for the data loader. If number of workers decides
+            how many samples to preload into the GPU or CPU while the core is still using
+            another sample
+        non_image_ext: a list of allowed extension in str. If the extension(s) of your files is not a common image file extension, use non_image_ext
+            to pass authorized extensions (like "npy"), or pass 'auto' to allow files with all extensions to be read. 
+        
+    Returns:
+        dataloader: a dictionary of pytorch dataloaders
+        dataset_sizes: a dictionary giving the dataset sizes
+        class_names: a list of class names detected in the directory
+        dict_c2i: a dictionary for class to index mapping used by the dataloader
+
+    """
+
     if mode == 'eval':
-        print('step1')
+        #print('step1')
         if num_workers==None:
             num_workers=0
         else:
             pass
         # Note that in this case, data_dir does not have the train and test subfolders
-           
-        image_datasets = {'eval': MyImageFolder(data_dir, data_transforms['eval'])}
+        #  
+        if non_image_ext==None:
+            image_datasets = {'eval': MyImageFolder(data_dir, data_transforms['eval'])}
+        elif non_image_ext!='auto':
+            image_datasets = {'eval': dataset.DatasetFolder(data_dir, data_transforms['eval'], extensions=non_image_ext)}
+        elif non_image_ext=='auto':
+            image_datasets = {'eval': dataset.DatasetFolder(data_dir, data_transforms['eval'], is_valid_file=lambda y: True)}
         #print('got image_datasets')
         #print(image_datasets)
         dataloaders = {'eval': torch.utils.data.DataLoader(image_datasets['eval'], batch_size=batch_size,shuffle=False, num_workers=num_workers) }
@@ -140,8 +168,15 @@ def load_data(data_dir, data_transforms, mode = 'eval',
             num_workers=0
         else:
             pass
-
-        image_datasets = {'test': datasets.ImageFolder(data_dir, data_transforms['test'])}
+        # If the extension(s) of your files is not a common image file extension, use non_image_ext
+        # to pass authorized extensions, or pass 'auto' to allow files with all extensions to be read. 
+        if non_image_ext==None:
+            image_datasets = {'test': datasets.ImageFolder(data_dir, data_transforms['test'])}
+        elif non_image_ext!='auto':
+            image_datasets = {'test': datasets.DatasetFolder(data_dir, data_transforms['test'], extensions=non_image_ext)}
+        elif non_image_ext=='auto':
+            image_datasets = {'test': datasets.DatasetFolder(data_dir, data_transforms['test'], is_valid_file=lambda y: True)}
+        
         dataloaders = {'test': torch.utils.data.DataLoader(image_datasets['test'], batch_size=batch_size,shuffle=False, num_workers=num_workers) }
         dataset_sizes = {'test': len(image_datasets['test'])}
         class_names = image_datasets['test'].classes
@@ -152,13 +187,21 @@ def load_data(data_dir, data_transforms, mode = 'eval',
             num_workers=0
         else:
             pass
-        
-        image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
+        # If the extension(s) of your files is not a common image file extension, use non_image_ext
+        # to pass authorized extensions, or pass 'auto' to allow files with all extensions to be read. 
+        if non_image_ext==None:
+            image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
                                               data_transforms[x]) for x in ['train', 'val']}
+        elif non_image_ext!='auto':
+            image_datasets = {x: datasets.DatasetFolder(os.path.join(data_dir, x),
+                                              data_transforms[x], extensions=non_image_ext) for x in ['train', 'val']}
+        elif non_image_ext=='auto':
+            image_datasets = {x: datasets.DatasetFolder(os.path.join(data_dir, x),
+                                              data_transforms[x], is_valid_file=lambda y: True) for x in ['train', 'val']}
         dataloaders = {'train': torch.utils.data.DataLoader(image_datasets['train'], batch_size=batch_size,
-                                                 shuffle=True, num_workers=num_workers), 
+                                                 shuffle=True, num_workers=num_workers, drop_last=True), 
                        'val': torch.utils.data.DataLoader(image_datasets['val'], batch_size=batch_size,
-                                                 shuffle=False, num_workers=num_workers)}
+                                                 shuffle=False, num_workers=num_workers, drop_last=True)}
         dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
         class_names = image_datasets['train'].classes
         dict_c2i=image_datasets['train'].class_to_idx
@@ -176,7 +219,17 @@ Feature extraction data output setup
 """""""""""""""""""""""""""""""""
 
 def feature_eval_prep(class_to_idx, feat_path="features"):
+    """
+    This function is used for preparing output directories for feature evaluation process
+    and returns the index to class dictionary for later use in that process.
 
+    class_to_idx: a dictionary for class to index mapping used by the dataloader
+    feat_path: path name of the directory where features will be stored.
+
+    return
+         dict_i2c: the index to class dictionary
+
+    """
     feat_path="features"
     # Please delete features folder if it previously exists
     if os.path.isdir(feat_path)==False:
@@ -201,6 +254,14 @@ into train/val/test folders under target fold (targ_folder)
 """""""""""""""""""""""""""""""""
 def refolder(data_folder, targ_folder, train_fraction=0.8, val_fraction=0.2, test_fraction=0.0, 
               remove_original=False):
+    """
+    Rearranging files under source folder (data_folder) with class subfolders 
+    into train/val/test folders under target fold (targ_folder)
+
+    Arguments:
+        
+    """
+    
     r=data_folder
     classes=[f for f in os.listdir(r) if os.path.isdir(os.path.join(r,f))]
     print('1 step')

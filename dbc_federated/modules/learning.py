@@ -110,7 +110,7 @@ def test_model(model, dataloaders, dataset_sizes,  use_gpu):
     print("===>Test begains...")
     since = time.time()
     phase='test'
-
+    model.eval()
     running_corrects = 0.0
     
     # Iterate over data.
@@ -146,7 +146,7 @@ Training model
 
 """""""""""""""""""""""""""""""""
 def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, scheduler, 
-                use_gpu, num_epochs, output_dir, mixup = False, alpha = 0.1):
+                use_gpu, num_epochs, output_dir, output_name= 'trained_model.t7',mixup = False, alpha = 0.1):
     #print("MIXUP".format(mixup))
     since = time.time()
 
@@ -220,7 +220,7 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
                 #state = {'net': model.state_dict()}
                 if not os.path.isdir(output_dir):
                     os.mkdir(output_dir)
-                torch.save(model, os.path.join(output_dir,'trained_model.t7'))
+                torch.save(model, os.path.join(output_dir,output_name))
                 print(r"Model Saved...")
 
         print()
