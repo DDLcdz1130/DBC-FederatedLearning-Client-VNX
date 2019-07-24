@@ -1,6 +1,6 @@
 # Federated_Learning
 <br/>
-A Federated Learning computing framework for deep learning-based model development. 
+A Federated Learning computing framework for deep learning-based AI solution development. 
 
 Provided by DeepBrain Chain, Inc. and VisionX.org
 
