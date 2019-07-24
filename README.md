@@ -90,3 +90,4 @@ Xu Han, xhan415@gmail.com     DeepBrain Chain, Inc
 
 Haoran Yu, haoranyu@deepbrainchain.org     DeepBrain Chain, Inc
 
+Duzhi Chen, duzhichen@visionx.org     DeepBrain Chain, Inc
