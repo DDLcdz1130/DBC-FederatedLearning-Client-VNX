@@ -78,7 +78,7 @@ This folder includes important source codes for the projects on actual industria
 These applications are very important for this big project. They are the sub-projects that this framework is built for. For each of these applications, the model will continuously be updated and developed by the community through the DBC distributed computing network. As time goes on, new applications will be added. We, along with the community, will continuously expand our application scope and build useful models for every industry.
 <br/><br/>
 
-# Please contribute
+# Please contribute 
 
 The lifeline of this project lies on the contribution of users. Participation in the application projects by contributing data and models is highly encouraged and REWARDED. As an open source project, you are also more than welcome to contribute codes or refine our existing scripts.
 
